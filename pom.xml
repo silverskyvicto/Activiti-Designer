@@ -4,7 +4,7 @@
 
 	<groupId>org.activiti.designer</groupId>
 	<artifactId>org.activiti.designer.root</artifactId>
-	<version>5.18.1-SNAPSHOT</version>
+	<version>5.23.0</version>
 	<packaging>pom</packaging>
 
 	<name>Activiti Designer - Root project</name>
