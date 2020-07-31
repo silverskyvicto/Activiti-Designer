@@ -4,7 +4,7 @@ import org.activiti.designer.kickstart.process.diagram.KickstartProcessFeaturePr
 import org.activiti.designer.kickstart.process.layout.KickstartProcessLayouter;
 import org.activiti.workflow.simple.definition.ListConditionStepDefinition;
 import org.activiti.workflow.simple.definition.ListStepDefinition;
-import org.eclipse.graphiti.features.ICustomUndoableFeature;
+import org.eclipse.graphiti.features.ICustomUndoRedoFeature;
 import org.eclipse.graphiti.features.context.IContext;
 import org.eclipse.graphiti.features.context.IMoveShapeContext;
 import org.eclipse.graphiti.features.impl.DefaultMoveShapeFeature;
@@ -15,7 +15,7 @@ import org.eclipse.graphiti.features.impl.DefaultMoveShapeFeature;
  * 
  * @author Tijs Rademakers
  */
-public class MoveStepDefinitionFeature extends DefaultMoveShapeFeature implements ICustomUndoableFeature {
+public class MoveStepDefinitionFeature extends DefaultMoveShapeFeature implements ICustomUndoRedoFeature {
 
   public MoveStepDefinitionFeature(KickstartProcessFeatureProvider fp) {
     super(fp);
@@ -45,15 +45,21 @@ public class MoveStepDefinitionFeature extends DefaultMoveShapeFeature implement
   }
 
   @Override
-  public void undo(IContext context) {
+  public void preUndo(IContext context) { }
+
+  @Override
+  public void postUndo(IContext context) {
     // Since the model is updated by the layout based on the actual shape order,
     // it's sufficient to force a re-layout at this point
     getProcessLayouter().relayout(((IMoveShapeContext)context).getTargetContainer(), (KickstartProcessFeatureProvider) getFeatureProvider());
     getProcessLayouter().relayout(((IMoveShapeContext)context).getSourceContainer(), (KickstartProcessFeatureProvider) getFeatureProvider());
   }
+
+  @Override
+  public void preRedo(IContext context) { }
   
   @Override
-  public void redo(IContext context) {
+  public void postRedo(IContext context) {
     // Since the model is updated by the layout based on the actual shape order,
     // it's sufficient to force a re-layout at this point
     getProcessLayouter().relayout(((IMoveShapeContext)context).getTargetContainer(), (KickstartProcessFeatureProvider) getFeatureProvider());

@@ -4,6 +4,7 @@ import org.activiti.designer.kickstart.process.KickstartProcessPluginImage;
 import org.activiti.designer.kickstart.process.diagram.KickstartProcessFeatureProvider;
 import org.activiti.workflow.simple.definition.ScriptStepDefinition;
 import org.activiti.workflow.simple.definition.StepDefinition;
+import org.eclipse.graphiti.features.context.IContext;
 import org.eclipse.graphiti.features.context.ICreateContext;
 
 public class CreateScriptStepFeature extends AbstractCreateStepDefinitionFeature {
@@ -25,6 +26,18 @@ public class CreateScriptStepFeature extends AbstractCreateStepDefinitionFeature
     definition.setName("Script step");
     return definition;
   }
+
+  @Override
+  public void preUndo(IContext context) { }
+
+  @Override
+  public void postUndo(IContext context) { }
+
+  @Override
+  public void preRedo(IContext context) { }
+
+  @Override
+  public void postRedo(IContext context) { }
 
   @Override
   public String getCreateImageId() {

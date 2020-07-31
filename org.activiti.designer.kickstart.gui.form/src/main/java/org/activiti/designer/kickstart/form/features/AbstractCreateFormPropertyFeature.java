@@ -5,7 +5,7 @@ import org.activiti.designer.util.editor.ModelHandler;
 import org.activiti.workflow.simple.definition.form.FormPropertyDefinition;
 import org.activiti.workflow.simple.definition.form.FormPropertyDefinitionContainer;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.graphiti.features.ICustomUndoableFeature;
+import org.eclipse.graphiti.features.ICustomUndoRedoFeature;
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.features.context.IContext;
 import org.eclipse.graphiti.features.context.ICreateContext;
@@ -18,7 +18,7 @@ import org.eclipse.graphiti.features.impl.AbstractCreateFeature;
  *  
  * @author Frederik Heremans
  */
-public abstract class AbstractCreateFormPropertyFeature extends AbstractCreateFeature implements ICustomUndoableFeature {
+public abstract class AbstractCreateFormPropertyFeature extends AbstractCreateFeature implements ICustomUndoRedoFeature {
 
   protected FormPropertyDefinition createdDefinition;
   protected FormPropertyDefinitionContainer definitionContainer;
@@ -55,17 +55,23 @@ public abstract class AbstractCreateFormPropertyFeature extends AbstractCreateFe
   public boolean canRedo(IContext context) {
     return createdDefinition != null && definitionContainer != null;
   }
+
+  @Override
+  public void preUndo(IContext context) { }
   
   @Override
-  public void undo(IContext context) {
+  public void postUndo(IContext context) {
     KickstartFormMemoryModel model = (ModelHandler.getKickstartFormMemoryModel(EcoreUtil.getURI(getDiagram())));
     if (model != null && model.isInitialized() && createdDefinition != null) {
       definitionContainer.removeFormProperty(createdDefinition);
     }
   }
+
+  @Override
+  public void preRedo(IContext context) { }
   
   @Override
-  public void redo(IContext context) {
+  public void postRedo(IContext context) {
     KickstartFormMemoryModel model = (ModelHandler.getKickstartFormMemoryModel(EcoreUtil.getURI(getDiagram())));
     if (model != null && model.isInitialized() && createdDefinition != null) {
       definitionContainer.addFormProperty(createdDefinition);

@@ -20,7 +20,7 @@ public class KickstartProcessEditorUpdateBehavior extends DefaultUpdateBehavior 
   @Override
   public TransactionalEditingDomain getEditingDomain() {
     if (super.getEditingDomain() == null) {
-      createEditingDomain();
+      createEditingDomain(null);
     }
 
     return super.getEditingDomain();

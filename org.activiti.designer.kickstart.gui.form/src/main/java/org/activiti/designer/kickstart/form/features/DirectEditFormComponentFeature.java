@@ -4,7 +4,7 @@ import org.activiti.designer.kickstart.form.command.KickstartModelUpdater;
 import org.activiti.designer.kickstart.form.diagram.KickstartFormFeatureProvider;
 import org.activiti.workflow.simple.definition.form.FormPropertyDefinition;
 import org.activiti.workflow.simple.definition.form.FormPropertyGroup;
-import org.eclipse.graphiti.features.ICustomUndoableFeature;
+import org.eclipse.graphiti.features.ICustomUndoRedoFeature;
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.features.context.IContext;
 import org.eclipse.graphiti.features.context.IDirectEditingContext;
@@ -13,7 +13,7 @@ import org.eclipse.graphiti.features.impl.AbstractDirectEditingFeature;
 /**
  * @author Frederik Heremans
  */
-public class DirectEditFormComponentFeature extends AbstractDirectEditingFeature implements ICustomUndoableFeature {
+public class DirectEditFormComponentFeature extends AbstractDirectEditingFeature implements ICustomUndoRedoFeature {
 
   protected KickstartModelUpdater<?> updater;
   
@@ -57,7 +57,10 @@ public class DirectEditFormComponentFeature extends AbstractDirectEditingFeature
   }
 
   @Override
-  public void undo(IContext context) {
+  public void preUndo(IContext context) { }
+
+  @Override
+  public void postUndo(IContext context) {
     // Use an updater that does not trigger a diagram update, as this is done by the 
     // undo of the base class
     if (updater != null) {
@@ -71,7 +74,10 @@ public class DirectEditFormComponentFeature extends AbstractDirectEditingFeature
   }
 
   @Override
-  public void redo(IContext context) {
+  public void preRedo(IContext context) { }
+
+  @Override
+  public void postRedo(IContext context) {
     // Use an updater that does not trigger a diagram update, as this is done by the 
     // undo of the base class
     if (updater != null) {

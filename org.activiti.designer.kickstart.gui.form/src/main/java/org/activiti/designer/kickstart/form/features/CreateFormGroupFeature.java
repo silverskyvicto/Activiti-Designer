@@ -5,7 +5,7 @@ import org.activiti.designer.util.editor.KickstartFormMemoryModel;
 import org.activiti.designer.util.editor.ModelHandler;
 import org.activiti.workflow.simple.definition.form.FormPropertyGroup;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.graphiti.features.ICustomUndoableFeature;
+import org.eclipse.graphiti.features.ICustomUndoRedoFeature;
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.features.context.IContext;
 import org.eclipse.graphiti.features.context.ICreateContext;
@@ -15,7 +15,7 @@ import org.eclipse.graphiti.mm.pictograms.Diagram;
 /**
  * @author Frederik Heremans
  */
-public class CreateFormGroupFeature extends AbstractCreateFeature implements ICustomUndoableFeature {
+public class CreateFormGroupFeature extends AbstractCreateFeature implements ICustomUndoRedoFeature {
 
   protected FormPropertyGroup createdGroup;
   
@@ -52,17 +52,23 @@ public class CreateFormGroupFeature extends AbstractCreateFeature implements ICu
   public boolean canRedo(IContext context) {
     return createdGroup != null;
   }
-  
+
   @Override
-  public void undo(IContext context) {
+  public void preUndo(IContext context) { }
+
+  @Override
+  public void postUndo(IContext context) {
     KickstartFormMemoryModel model = (ModelHandler.getKickstartFormMemoryModel(EcoreUtil.getURI(getDiagram())));
     if (model != null && model.isInitialized() && createdGroup != null) {
       model.getFormDefinition().getFormGroups().remove(createdGroup);
     }
   }
+
+  @Override
+  public void preRedo(IContext context) { }
   
   @Override
-  public void redo(IContext context) {
+  public void postRedo(IContext context) {
     KickstartFormMemoryModel model = (ModelHandler.getKickstartFormMemoryModel(EcoreUtil.getURI(getDiagram())));
     if (model != null && model.isInitialized() && createdGroup != null) {
       model.getFormDefinition().addFormPropertyGroup(createdGroup);

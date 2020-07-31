@@ -4,7 +4,7 @@ import org.activiti.designer.kickstart.process.command.KickstartProcessModelUpda
 import org.activiti.designer.kickstart.process.diagram.KickstartProcessFeatureProvider;
 import org.activiti.workflow.simple.definition.NamedStepDefinition;
 import org.activiti.workflow.simple.definition.StepDefinition;
-import org.eclipse.graphiti.features.ICustomUndoableFeature;
+import org.eclipse.graphiti.features.ICustomUndoRedoFeature;
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.features.context.IContext;
 import org.eclipse.graphiti.features.context.IDirectEditingContext;
@@ -13,7 +13,7 @@ import org.eclipse.graphiti.features.impl.AbstractDirectEditingFeature;
 /**
  * @author Tijs Rademakers
  */
-public class DirectEditStepDefinitionFeature extends AbstractDirectEditingFeature implements ICustomUndoableFeature {
+public class DirectEditStepDefinitionFeature extends AbstractDirectEditingFeature implements ICustomUndoRedoFeature {
 
   protected KickstartProcessModelUpdater<?> updater;
   
@@ -62,7 +62,10 @@ public class DirectEditStepDefinitionFeature extends AbstractDirectEditingFeatur
   }
 
   @Override
-  public void undo(IContext context) {
+  public void preUndo(IContext context) { }
+
+  @Override
+  public void postUndo(IContext context) {
     // Use an updater that does not trigger a diagram update, as this is done by the 
     // undo of the base class
     if (updater != null) {
@@ -76,7 +79,10 @@ public class DirectEditStepDefinitionFeature extends AbstractDirectEditingFeatur
   }
 
   @Override
-  public void redo(IContext context) {
+  public void preRedo(IContext context) { }
+
+  @Override
+  public void postRedo(IContext context) {
     // Use an updater that does not trigger a diagram update, as this is done by the 
     // undo of the base class
     if (updater != null) {
